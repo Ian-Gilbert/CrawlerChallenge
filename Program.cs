@@ -11,7 +11,22 @@ var text = string.Join(' ', innerText);
 var rgx = new Regex("\\[\\d*\\]|[^\\w -]");
 var words = rgx.Replace(text, "").Split(' ');
 
+var frequencies = new Dictionary<string, int>();
 foreach (var word in words)
 {
-    System.Console.WriteLine(word);
+    frequencies.TryGetValue(word, out var currentFreq);
+    frequencies[word] = ++currentFreq;
+}
+
+frequencies = frequencies.OrderByDescending(x => x.Value)
+                         .Take(10)
+                         .ToDictionary(x => x.Key, x => x.Value);
+
+var maxWordLength = frequencies.Keys.Max(x => x.Length);
+var header = $"Word{new String(' ', maxWordLength - 4)} | Frequency";
+System.Console.WriteLine(header);
+System.Console.WriteLine(new String('-', header.Length));
+foreach ((var word, var freq) in frequencies)
+{
+    System.Console.WriteLine($"{word}{new String(' ', maxWordLength - word.Length)} | {freq}");
 }
