@@ -18,6 +18,12 @@ foreach (var word in words)
     frequencies[word] = ++currentFreq;
 }
 
+var excludedWords = new string[] { "microsoft", "aas;ldfjas" };
+foreach (var word in excludedWords)
+{
+    frequencies.Remove(word);
+}
+
 frequencies = frequencies.OrderByDescending(x => x.Value)
                          .Take(10)
                          .ToDictionary(x => x.Key, x => x.Value);
